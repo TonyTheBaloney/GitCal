@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/fatih/color"
 	"gopkg.in/yaml.v3"
 )
@@ -19,6 +20,14 @@ var greens = []color.Attribute{
 	color.BgHiWhite, // High (simulate with bright color)
 	color.BgWhite,   // Very High (simulate with white)
 }
+
+var style = lipgloss.NewStyle().
+	Bold(true).
+	Background(lipgloss.Color("#30383aff")).
+	PaddingTop(1).
+	PaddingLeft(1).
+	PaddingRight(2).
+	PaddingBottom(0)
 
 type Commit struct {
 	Hash      string
@@ -98,7 +107,7 @@ func printCommitHistory(history CommitHistory, uptoDate time.Time) {
 		}
 	}
 	fmt.Println()
-
+	output := ""
 	for row := range rows {
 		for col := 0; col < columns; col++ {
 			// Calculate the date for this cell
@@ -116,11 +125,12 @@ func printCommitHistory(history CommitHistory, uptoDate time.Time) {
 				level = len(greens) - 1 // Cap the level to the maximum defined
 			}
 			c := color.New(greens[level%len(greens)])
-			fmt.Print(" ")
-			c.Print("  ") // Two spaces make a square
+			output += " " + c.Sprint("  ") // Two spaces for each cell
 		}
-		fmt.Println()
+		output += "\n" // New line after each row
 	}
+	styledOutput := style.Render(output)
+	fmt.Print(styledOutput)
 }
 
 // run git log and parse into a format similar to GitHub's contribution graph
