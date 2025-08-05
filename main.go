@@ -24,6 +24,9 @@ var greens = []color.Attribute{
 var style = lipgloss.NewStyle().
 	Bold(true).
 	Background(lipgloss.Color("#30383aff")).
+	Border(lipgloss.RoundedBorder()).
+	BorderForeground(lipgloss.Color("#ffffff")).
+	BorderStyle(lipgloss.NormalBorder()).
 	PaddingTop(1).
 	PaddingLeft(1).
 	PaddingRight(2).
